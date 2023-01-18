@@ -1,6 +1,5 @@
-from detextify.inpainter import Inpainter
+import cv2
 from detextify.text_detector import TextDetector
-
 
 class Detextifier:
     def __init__(self, text_detector: TextDetector, inpainter: Inpainter):
@@ -20,8 +19,11 @@ class Detextifier:
                 break
 
             print(f"\tCalling in-painting model...")
-            self.inpainter.inpaint(to_inpaint_path, text_boxes, prompt, out_image_path)
-            import os
-            assert os.path.exists(out_image_path)
-            to_inpaint_path = out_image_path
+self.inpainter.inpaint(to_inpaint_path, text_boxes, prompt, out_image_path)
+import os
+assert os.path.exists(out_image_path)
 
+# Draw "hello world" in white in the text box
+import cv2
+cv2.putText(out_image_path, "hello world", (text_boxes[0].x, text_boxes[0].y), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+to_inpaint_path = out_image_path

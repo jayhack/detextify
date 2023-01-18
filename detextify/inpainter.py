@@ -1,8 +1,7 @@
-"""In-painting models."""
+import cv2
 import io
 import math
 import openai
-import replicate
 import requests
 import tempfile
 import torch
@@ -75,12 +74,14 @@ class StableDiffusionInpainter(Inpainter):
     new_image.paste(image)
     return new_image
 
-  def _make_mask(self, text_boxes: Sequence[TextBox], height: int, width: int, mode: str) -> Image:
-    """Returns a black image with white rectangles where the text boxes are."""
-    num_channels = len(mode)
-    background_color = tuple([0] * num_channels)
-    mask_color = tuple([255] * num_channels)
+mask_color = tuple([255] * num_channels)
+mask = Image.new(mode, (width, height), color=background_color)
+mask_draw = ImageDraw.Draw(mask)
 
+# Draw "hello world" in white in the text box
+import cv2
+cv2.putText(mask, "hello world", (text_boxes[0].x, text_boxes[0].y), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+for text_box in text_boxes:
     mask = Image.new(mode, (width, height), background_color)
     mask_draw = ImageDraw.Draw(mask)
     for text_box in text_boxes:
