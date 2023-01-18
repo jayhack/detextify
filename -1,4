@@ -1,5 +1,6 @@
-from detextify.inpainter import Inpainter
+import cv2
 from detextify.text_detector import TextDetector
+from detextify.utils import draw_text_box
 
 
 class Detextifier:
