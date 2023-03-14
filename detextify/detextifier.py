@@ -1,6 +1,8 @@
 from detextify.inpainter import Inpainter
+from detextify.inpainter import Inpainter
 from detextify.text_detector import TextDetector
 
+import cv2
 
 class Detextifier:
     def __init__(self, text_detector: TextDetector, inpainter: Inpainter):
@@ -15,8 +17,11 @@ class Detextifier:
             print(f"\tCalling text detector...")
             text_boxes = self.text_detector.detect_text(to_inpaint_path)
             print(f"\tDetected {len(text_boxes)} text boxes.")
-
+            if prompt is not None:
+                for text_box in text_boxes:
+                    cv2.putText(to_inpaint_path, prompt, (text_box.x, text_box.y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
             if not text_boxes:
+                break
                 break
 
             print(f"\tCalling in-painting model...")
